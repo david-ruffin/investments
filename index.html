@@ -434,23 +434,50 @@
         </div>
 
         <div class="chart-container">
-            <div class="chart-title">📊 Revenue Trend (3 Years)</div>
-            <div class="bar-chart">
-                <div class="bar-group">
-                    <div class="bar" style="height: 70%;">$1.32M</div>
-                    <div class="bar-label">2022</div>
+            <div class="chart-title">📊 Revenue Growth Trajectory</div>
+            <div style="position: relative; height: 250px; margin: 20px 0;">
+                <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-right: 10px;">
+                    <div style="border-bottom: 1px dashed #e2e8f0; position: relative;">
+                        <span style="position: absolute; left: -5px; top: -8px; font-size: 0.7em; color: #718096;">$2.0M</span>
+                    </div>
+                    <div style="border-bottom: 1px dashed #e2e8f0; position: relative;">
+                        <span style="position: absolute; left: -5px; top: -8px; font-size: 0.7em; color: #718096;">$1.5M</span>
+                    </div>
+                    <div style="border-bottom: 1px dashed #e2e8f0; position: relative;">
+                        <span style="position: absolute; left: -5px; top: -8px; font-size: 0.7em; color: #718096;">$1.0M</span>
+                    </div>
                 </div>
-                <div class="bar-group">
-                    <div class="bar" style="height: 87%;">$1.75M</div>
-                    <div class="bar-label">2023</div>
+                <div class="bar-chart" style="position: relative; z-index: 1; height: 100%;">
+                    <div class="bar-group">
+                        <div class="bar" style="height: 55%; background: linear-gradient(180deg, #f56565, #e53e3e);">$1.32M</div>
+                        <div class="bar-label">2022</div>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar" style="height: 75%; background: linear-gradient(180deg, #4299e1, #3182ce);">$1.75M</div>
+                        <div class="bar-label">2023</div>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar" style="height: 76%; background: linear-gradient(180deg, #48bb78, #38a169);">$1.78M</div>
+                        <div class="bar-label">2024</div>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar" style="height: 82%; background: linear-gradient(180deg, #9f7aea, #805ad5);">$1.88M</div>
+                        <div class="bar-label">TTM</div>
+                    </div>
                 </div>
-                <div class="bar-group">
-                    <div class="bar" style="height: 89%;">$1.78M</div>
-                    <div class="bar-label">2024</div>
+            </div>
+            <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px;">
+                <div>
+                    <div style="color: #f56565; font-weight: bold;">Turnaround</div>
+                    <div style="font-size: 0.8em; color: #718096;">From -$21K loss</div>
                 </div>
-                <div class="bar-group">
-                    <div class="bar" style="height: 94%;">$1.88M</div>
-                    <div class="bar-label">TTM</div>
+                <div>
+                    <div style="color: #4299e1; font-weight: bold;">+33% Jump</div>
+                    <div style="font-size: 0.8em; color: #718096;">2022→2023</div>
+                </div>
+                <div>
+                    <div style="color: #48bb78; font-weight: bold;">Stabilized</div>
+                    <div style="font-size: 0.8em; color: #718096;">Consistent growth</div>
                 </div>
             </div>
             <div class="source">Source: CIM Page 20</div>
@@ -553,13 +580,21 @@
         </div>
 
         <div class="risk-section">
+            <div class="section-title">🎯 Why They're Selling (Based on Analysis)</div>
+            <div class="list-item" style="color: #d69e2e;"><strong>Owner's Weakness:</strong> "Sales are not his strong suit" - Q&A Doc. Owner admits he can't grow the business further</div>
+            <div class="list-item" style="color: #d69e2e;"><strong>Age/Burnout:</strong> 18+ years running the business, now wants to step back from admin duties</div>
+            <div class="list-item" style="color: #d69e2e;"><strong>Growth Plateau:</strong> Revenue growth slowing (1.6% in 2024, 5.8% TTM) despite turnaround</div>
+            <div class="list-item" style="color: #d69e2e;"><strong>Ideal Exit Timing:</strong> Business is finally profitable after 2022 losses - perfect time to sell</div>
+            <div class="list-item" style="color: #48bb78;"><strong>Good Sign:</strong> Owner willing to stay as technical lead shows confidence in business</div>
+        </div>
+
+        <div class="risk-section">
             <div class="section-title">⚠️ Risk Factors</div>
-            <div class="list-item">Top client is 17% of revenue</div>
-            <div class="list-item">Owner is key technical resource</div>
-            <div class="list-item">Only 4 total employees</div>
-            <div class="list-item">Limited sales capability</div>
-            <div class="list-item">Government client (12%) on annual renewal</div>
-            <div class="list-item">2022 had negative EBITDA</div>
+            <div class="list-item">Top client is 17% of revenue (concentration risk)</div>
+            <div class="list-item">Owner is key technical resource and account manager</div>
+            <div class="list-item">Only 4 total employees (scalability concerns)</div>
+            <div class="list-item">Government client (12%) on annual renewal cycle</div>
+            <div class="list-item">2022 had negative EBITDA before turnaround</div>
         </div>
 
         <div class="chart-container">
