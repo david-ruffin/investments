@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novusys LLC - Investor Analysis Dashboard</title>
+    <title>405Network - Your Complete IT Department</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,638 +13,819 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 10px;
+            font-family: 'Space Grotesk', monospace;
+            background: #f0f0f0;
+            color: #000;
+            overflow-x: hidden;
         }
 
-        .dashboard {
+        /* Parallax Background */
+        .parallax-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .parallax-element {
+            position: absolute;
+            opacity: 0.08;
+        }
+
+        .parallax-square-1 {
+            width: 200px;
+            height: 200px;
+            background: #ff0000;
+            top: 10%;
+            left: 80%;
+            transform: rotate(45deg);
+        }
+
+        .parallax-square-2 {
+            width: 150px;
+            height: 150px;
+            background: #000;
+            top: 50%;
+            left: 10%;
+        }
+
+        .parallax-square-3 {
+            width: 300px;
+            height: 300px;
+            background: #ffff00;
+            top: 70%;
+            right: 20%;
+            transform: rotate(15deg);
+        }
+
+        /* Header */
+        .header {
+            background: #000;
+            color: #fff;
+            padding: 25px 30px;
+            border-bottom: 6px solid #ff0000;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .header.scrolled {
+            padding: 15px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #667eea;
-        }
-
-        .header h1 {
-            color: #2d3748;
-            font-size: clamp(1.5em, 5vw, 2.5em);
-            margin-bottom: 10px;
-        }
-
-        .header .subtitle {
-            color: #718096;
-            font-size: clamp(0.9em, 3vw, 1.2em);
-        }
-
-        .valuation-box {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .valuation-box h2 {
-            font-size: clamp(1.2em, 4vw, 1.5em);
-            margin-bottom: 15px;
-        }
-
-        .valuation-range {
-            font-size: clamp(1.8em, 6vw, 2.5em);
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .valuation-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .valuation-metric {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: clamp(0.8em, 2.5vw, 1em);
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .metric-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .metric-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .metric-title {
-            color: #4a5568;
-            font-size: clamp(0.7em, 2vw, 0.9em);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .metric-value {
-            color: #2d3748;
-            font-size: clamp(1.3em, 4vw, 2em);
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .metric-change {
-            font-size: clamp(0.7em, 2vw, 0.9em);
-            padding: 2px 6px;
-            border-radius: 5px;
-            display: inline-block;
-        }
-
-        .positive {
-            color: #48bb78;
-            background: #e6fffa;
-        }
-
-        .negative {
-            color: #f56565;
-            background: #fff5f5;
-        }
-
-        .chart-container {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-
-        .chart-title {
-            color: #2d3748;
-            font-size: clamp(1em, 3vw, 1.3em);
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .bar-chart {
             display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            height: 200px;
-            margin-bottom: 10px;
-            min-width: 300px;
-            padding: 0 10px;
-        }
-
-        .bar-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: flex-end;
-            margin: 0 5px;
-            min-width: 60px;
         }
 
-        .bar {
-            width: clamp(35px, 8vw, 60px);
-            background: linear-gradient(180deg, #667eea, #764ba2);
-            border-radius: 5px 5px 0 0;
-            transition: all 0.3s ease;
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+
+        .logo span {
+            color: #ff0000;
+        }
+
+        .header-cta {
             display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding-top: 5px;
-            color: white;
-            font-weight: bold;
-            font-size: clamp(0.7em, 2vw, 0.9em);
+            align-items: center;
+            gap: 30px;
         }
 
-        .bar:hover {
-            transform: scaleY(1.05);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .phone-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffff00;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
         }
 
-        .bar-label {
-            margin-top: 8px;
-            color: #4a5568;
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #ff0000;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #fff;
+            padding: 140px 30px 80px;
+            border-bottom: 6px solid #000;
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: -3px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .hero-text .highlight {
+            background: #ff0000;
+            color: #fff;
+            padding: 5px 15px;
+            display: inline-block;
+            transform: rotate(-1deg);
+        }
+
+        .hero-text .subheading {
+            font-size: 28px;
+            color: #333;
+            margin: 30px 0;
+            line-height: 1.3;
             font-weight: 600;
-            font-size: clamp(0.7em, 2vw, 0.9em);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 20px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 4px solid #000;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .btn-primary {
+            background: #000;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translate(-6px, -6px);
+            box-shadow: 6px 6px 0 #ff0000;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #000;
+        }
+
+        .btn-secondary:hover {
+            background: #ffff00;
+            transform: translate(-6px, -6px);
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        /* Benefits Box */
+        .benefits-box {
+            background: #ffff00;
+            border: 5px solid #000;
+            padding: 40px;
+            position: relative;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .benefit-item::before {
+            content: '✓';
+            color: #000;
+            font-weight: 700;
+            margin-right: 15px;
+            font-size: 24px;
+            background: #fff;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #000;
+        }
+
+        /* Problem/Solution Section */
+        .problems {
+            background: #000;
+            color: #fff;
+            padding: 80px 30px;
+            border-bottom: 6px solid #ff0000;
+        }
+
+        .problems-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .problems h2 {
+            font-size: 56px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            color: #ff0000;
+        }
+
+        .problems-subtitle {
+            font-size: 24px;
+            margin-bottom: 60px;
+            color: #fff;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .problem-card {
+            background: #fff;
+            color: #000;
+            padding: 40px;
+            border: 5px solid #ff0000;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translate(-8px, -8px);
+            box-shadow: 8px 8px 0 #ffff00;
+        }
+
+        .problem-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .problem-text {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .solution-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            padding-top: 20px;
+            border-top: 3px solid #000;
+        }
+
+        /* Services Section */
+        .services {
+            background: #fff;
+            padding: 80px 30px;
+            border-bottom: 6px solid #000;
+        }
+
+        .services-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .services h2 {
+            font-size: 56px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 60px;
+        }
+
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-item {
+            background: #f0f0f0;
+            border: 4px solid #000;
+            padding: 30px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .service-item:hover {
+            background: #ffff00;
+            transform: translate(-5px, -5px);
+            box-shadow: 5px 5px 0 #000;
+        }
+
+        .service-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .service-desc {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: #ffff00;
+            padding: 80px 30px;
+            border-bottom: 6px solid #000;
+        }
+
+        .testimonials-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials h2 {
+            font-size: 56px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 60px;
             text-align: center;
         }
 
-        .table-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin: 0 -5px;
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
         }
 
-        .data-table {
-            width: 100%;
-            min-width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            table-layout: fixed;
+        .testimonial-card {
+            background: #fff;
+            border: 5px solid #000;
+            padding: 30px;
+            position: relative;
         }
 
-        .data-table th {
-            background: #f7fafc;
-            color: #2d3748;
-            padding: 8px 2px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
-            font-size: clamp(0.65em, 1.8vw, 0.9em);
-            white-space: normal;
-            overflow: visible;
-        }
-
-        .data-table td {
-            padding: 8px 2px;
-            border-bottom: 1px solid #e2e8f0;
-            color: #4a5568;
-            font-size: clamp(0.65em, 1.8vw, 0.9em);
-            white-space: normal;
-            overflow: visible;
-        }
-        
-        /* Specific column widths for mobile */
-        @media (max-width: 768px) {
-            .data-table th:first-child,
-            .data-table td:first-child {
-                width: 25%;
-            }
-            
-            .data-table th:nth-child(2),
-            .data-table td:nth-child(2) {
-                width: 30%;
-            }
-            
-            .data-table th:nth-child(3),
-            .data-table td:nth-child(3) {
-                width: 25%;
-            }
-            
-            .data-table th:last-child,
-            .data-table td:last-child {
-                width: 20%;
-            }
-        }
-
-        .data-table tr:hover {
-            background: #f7fafc;
-        }
-
-        .source {
-            font-size: clamp(0.65em, 1.5vw, 0.75em);
-            color: #a0aec0;
+        .testimonial-text {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 20px;
             font-style: italic;
-            margin-top: 5px;
         }
 
-        .risk-section {
-            background: #fff5f5;
-            border-left: 4px solid #f56565;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .testimonial-author {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 16px;
         }
 
-        .opportunity-section {
-            background: #e6fffa;
-            border-left: 4px solid #48bb78;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .testimonial-company {
+            color: #666;
+            font-size: 14px;
         }
 
-        .section-title {
-            color: #2d3748;
-            font-size: clamp(1em, 3vw, 1.2em);
-            font-weight: 600;
+        /* Stats Section */
+        .stats {
+            background: #000;
+            color: #fff;
+            padding: 60px 30px;
+            border-bottom: 6px solid #ff0000;
+        }
+
+        .stats-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffff00;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: #fff;
+            padding: 100px 30px;
+            text-align: center;
+            border-bottom: 6px solid #000;
+        }
+
+        .cta-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 64px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -3px;
+            margin-bottom: 30px;
+        }
+
+        .cta p {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 50px;
+        }
+
+        .cta-phone {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ff0000;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            color: #fff;
+            padding: 60px 30px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #fff;
+            text-decoration: none;
+            line-height: 1.8;
+            display: block;
             margin-bottom: 10px;
         }
 
-        .list-item {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-            font-size: clamp(0.85em, 2.5vw, 1em);
-            line-height: 1.5;
+        .footer-section a:hover {
+            color: #ffff00;
         }
 
-        .list-item:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #667eea;
-            font-weight: bold;
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-text h1 {
+                font-size: 56px;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
         }
 
-        /* Mobile specific adjustments */
         @media (max-width: 768px) {
-            .dashboard {
-                padding: 10px;
-                border-radius: 15px;
+            .hero-text h1 {
+                font-size: 42px;
             }
-            
-            .metrics-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+
+            .hero-text .subheading {
+                font-size: 22px;
             }
-            
-            .valuation-details {
+
+            .problem-grid,
+            .service-list,
+            .testimonial-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .metric-card {
-                padding: 12px;
-            }
-            
-            .chart-container {
-                padding: 12px;
-            }
-            
-            .bar-chart {
-                height: 180px;
-            }
-            
-            /* Force horizontal scroll for tables on mobile */
-            .table-wrapper {
-                margin: 0 -10px;
-                padding: 0 10px;
-            }
-        }
 
-        /* Very small mobile screens */
-        @media (max-width: 380px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
+            .cta-phone {
+                font-size: 32px;
             }
-            
-            .header h1 {
-                font-size: 1.3em;
-            }
-            
-            .valuation-range {
-                font-size: 1.5em;
-            }
-        }
 
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #e2e8f0;
-            color: #718096;
-            font-size: clamp(0.75em, 2vw, 0.9em);
+            .header-cta {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">
-            <h1>🦈 Novusys LLC Investment Analysis</h1>
-            <div class="subtitle">Managed IT Services Provider | Chicago, IL</div>
-        </div>
-
-        <div class="valuation-box">
-            <h2>💰 Estimated Valuation</h2>
-            <div class="valuation-range">$950K - $1.35M</div>
-            <div class="valuation-details">
-                <div class="valuation-metric">
-                    <div><strong>3.5-5x EBITDA</strong></div>
-                    <div>Industry Standard</div>
-                </div>
-                <div class="valuation-metric">
-                    <div><strong>0.5-0.7x Revenue</strong></div>
-                    <div>85% Recurring</div>
-                </div>
-                <div class="valuation-metric">
-                    <div><strong>$271K EBITDA</strong></div>
-                    <div>TTM Performance</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-title">TTM Revenue</div>
-                <div class="metric-value">$1.88M</div>
-                <div class="metric-change positive">↑ 5.8%</div>
-                <div class="source">CIM P.20</div>
-            </div>
-            
-            <div class="metric-card">
-                <div class="metric-title">Net Income</div>
-                <div class="metric-value">$271K</div>
-                <div class="metric-change positive">↑ 17.8%</div>
-                <div class="source">CIM P.20</div>
-            </div>
-            
-            <div class="metric-card">
-                <div class="metric-title">Gross Margin</div>
-                <div class="metric-value">45.2%</div>
-                <div class="metric-change negative">↓ 0.8%</div>
-                <div class="source">CIM P.20</div>
-            </div>
-            
-            <div class="metric-card">
-                <div class="metric-title">Recurring %</div>
-                <div class="metric-value">85%</div>
-                <div class="metric-change positive">Stable</div>
-                <div class="source">CIM P.8</div>
-            </div>
-            
-            <div class="metric-card">
-                <div class="metric-title">Clients</div>
-                <div class="metric-value">48</div>
-                <div class="metric-change positive">Contract</div>
-                <div class="source">CIM P.8</div>
-            </div>
-            
-            <div class="metric-card">
-                <div class="metric-title">Monthly RR</div>
-                <div class="metric-value">$147K</div>
-                <div class="metric-change positive">$1.76M/yr</div>
-                <div class="source">CIM P.22</div>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <div class="chart-title">📊 Revenue Growth Trajectory</div>
-            <div style="position: relative; height: 250px; margin: 20px 0;">
-                <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-right: 10px;">
-                    <div style="border-bottom: 1px dashed #e2e8f0; position: relative;">
-                        <span style="position: absolute; left: -5px; top: -8px; font-size: 0.7em; color: #718096;">$2.0M</span>
-                    </div>
-                    <div style="border-bottom: 1px dashed #e2e8f0; position: relative;">
-                        <span style="position: absolute; left: -5px; top: -8px; font-size: 0.7em; color: #718096;">$1.5M</span>
-                    </div>
-                    <div style="border-bottom: 1px dashed #e2e8f0; position: relative;">
-                        <span style="position: absolute; left: -5px; top: -8px; font-size: 0.7em; color: #718096;">$1.0M</span>
-                    </div>
-                </div>
-                <div class="bar-chart" style="position: relative; z-index: 1; height: 100%;">
-                    <div class="bar-group">
-                        <div class="bar" style="height: 55%; background: linear-gradient(180deg, #f56565, #e53e3e);">$1.32M</div>
-                        <div class="bar-label">2022</div>
-                    </div>
-                    <div class="bar-group">
-                        <div class="bar" style="height: 75%; background: linear-gradient(180deg, #4299e1, #3182ce);">$1.75M</div>
-                        <div class="bar-label">2023</div>
-                    </div>
-                    <div class="bar-group">
-                        <div class="bar" style="height: 76%; background: linear-gradient(180deg, #48bb78, #38a169);">$1.78M</div>
-                        <div class="bar-label">2024</div>
-                    </div>
-                    <div class="bar-group">
-                        <div class="bar" style="height: 82%; background: linear-gradient(180deg, #9f7aea, #805ad5);">$1.88M</div>
-                        <div class="bar-label">TTM</div>
-                    </div>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px;">
-                <div>
-                    <div style="color: #f56565; font-weight: bold;">Turnaround</div>
-                    <div style="font-size: 0.8em; color: #718096;">From -$21K loss</div>
-                </div>
-                <div>
-                    <div style="color: #4299e1; font-weight: bold;">+33% Jump</div>
-                    <div style="font-size: 0.8em; color: #718096;">2022→2023</div>
-                </div>
-                <div>
-                    <div style="color: #48bb78; font-weight: bold;">Stabilized</div>
-                    <div style="font-size: 0.8em; color: #718096;">Consistent growth</div>
-                </div>
-            </div>
-            <div class="source">Source: CIM Page 20</div>
-        </div>
-
-        <div class="chart-container">
-            <div class="chart-title">💵 Profitability (3 Years)</div>
-            <div class="table-wrapper">
-                <table class="data-table" style="table-layout: auto;">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%;">Year</th>
-                            <th style="width: 27%;">Revenue</th>
-                            <th style="width: 27%;">Net Inc</th>
-                            <th style="width: 26%;">EBITDA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2022</td>
-                            <td>$1.31M</td>
-                            <td style="color: #f56565;">-$21K</td>
-                            <td style="color: #f56565;">-$19K</td>
-                        </tr>
-                        <tr>
-                            <td>2023</td>
-                            <td>$1.75M</td>
-                            <td style="color: #48bb78;">$125K</td>
-                            <td style="color: #48bb78;">$125K</td>
-                        </tr>
-                        <tr>
-                            <td>2024</td>
-                            <td>$1.78M</td>
-                            <td style="color: #48bb78;">$230K</td>
-                            <td style="color: #48bb78;">$230K</td>
-                        </tr>
-                        <tr style="background: #e6fffa;">
-                            <td><strong>TTM</strong></td>
-                            <td><strong>$1.88M</strong></td>
-                            <td style="color: #48bb78;"><strong>$271K</strong></td>
-                            <td style="color: #48bb78;"><strong>$271K</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="source">Source: CIM Pages 20-21</div>
-        </div>
-
-        <div class="chart-container">
-            <div class="chart-title">👥 Top Clients</div>
-            <div class="table-wrapper">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Client</th>
-                            <th>% Rev</th>
-                            <th>Industry</th>
-                            <th>Annual</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>#19</td>
-                            <td>17%</td>
-                            <td>Mfg</td>
-                            <td>$322K</td>
-                        </tr>
-                        <tr>
-                            <td>#24</td>
-                            <td>14%</td>
-                            <td>Health</td>
-                            <td>$251K</td>
-                        </tr>
-                        <tr>
-                            <td>#11</td>
-                            <td>12%</td>
-                            <td>Gov</td>
-                            <td>$231K</td>
-                        </tr>
-                        <tr style="background: #f7fafc;">
-                            <td><strong>Top 5</strong></td>
-                            <td><strong>59%</strong></td>
-                            <td>-</td>
-                            <td><strong>$1.11M</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="source">Source: CIM Pages 8, 22-24</div>
-        </div>
-
-        <div class="opportunity-section">
-            <div class="section-title">✅ Opportunities</div>
-            <div class="list-item">85% recurring revenue with auto-renewing contracts</div>
-            <div class="list-item">Owner staying post-sale at $165K salary</div>
-            <div class="list-item">33% revenue growth over 3 years</div>
-            <div class="list-item">18+ year established business</div>
-            <div class="list-item">Senior team with 7-9 years tenure</div>
-            <div class="list-item">$80K/month vendor costs passed to clients</div>
-        </div>
-
-        <div class="risk-section">
-            <div class="section-title">🎯 Why They're Selling (Based on Analysis)</div>
-            <div class="list-item" style="color: #d69e2e;"><strong>Owner's Weakness:</strong> "Sales are not his strong suit" - Q&A Doc. Owner admits he can't grow the business further</div>
-            <div class="list-item" style="color: #d69e2e;"><strong>Age/Burnout:</strong> 18+ years running the business, now wants to step back from admin duties</div>
-            <div class="list-item" style="color: #d69e2e;"><strong>Growth Plateau:</strong> Revenue growth slowing (1.6% in 2024, 5.8% TTM) despite turnaround</div>
-            <div class="list-item" style="color: #d69e2e;"><strong>Ideal Exit Timing:</strong> Business is finally profitable after 2022 losses - perfect time to sell</div>
-            <div class="list-item" style="color: #48bb78;"><strong>Good Sign:</strong> Owner willing to stay as technical lead shows confidence in business</div>
-        </div>
-
-        <div class="risk-section">
-            <div class="section-title">⚠️ Risk Factors</div>
-            <div class="list-item">Top client is 17% of revenue (concentration risk)</div>
-            <div class="list-item">Owner is key technical resource and account manager</div>
-            <div class="list-item">Only 4 total employees (scalability concerns)</div>
-            <div class="list-item">Government client (12%) on annual renewal cycle</div>
-            <div class="list-item">2022 had negative EBITDA before turnaround</div>
-        </div>
-
-        <div class="chart-container">
-            <div class="chart-title">📈 Key Metrics</div>
-            <div class="table-wrapper">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Metric</th>
-                            <th>Value</th>
-                            <th>Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>3-yr Growth</td>
-                            <td>12.7%</td>
-                            <td style="color: #48bb78;">Strong</td>
-                        </tr>
-                        <tr>
-                            <td>EBITDA Margin</td>
-                            <td>14.4%</td>
-                            <td style="color: #f0ad4e;">Average</td>
-                        </tr>
-                        <tr>
-                            <td>Retention</td>
-                            <td>~90%+</td>
-                            <td style="color: #48bb78;">Strong</td>
-                        </tr>
-                        <tr>
-                            <td>Rev/Employee</td>
-                            <td>$471K</td>
-                            <td style="color: #48bb78;">Excellent</td>
-                        </tr>
-                        <tr>
-                            <td>Endpoints</td>
-                            <td>932</td>
-                            <td style="color: #48bb78;">Efficient</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="source">Source: CIM Pages 8-10, 16, 20-21</div>
-        </div>
-
-        <div class="footer">
-            📄 Data: Confidential Information Memorandum, Q&A Document<br>
-            💼 IOI Deadline: September 5, 2025
-        </div>
+    <!-- Parallax Background -->
+    <div class="parallax-container">
+        <div class="parallax-element parallax-square-1" data-speed="0.5"></div>
+        <div class="parallax-element parallax-square-2" data-speed="0.3"></div>
+        <div class="parallax-element parallax-square-3" data-speed="0.7"></div>
     </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <div class="logo">405<span>NETWORK</span></div>
+            <div class="header-cta">
+                <a href="tel:1-800-IT-HELP" class="phone-number">1-800-IT-HELP</a>
+                <nav>
+                    <a href="#problems">Problems</a>
+                    <a href="#services">Services</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Your <span class="highlight">IT Department</span> Without The Headaches</h1>
+                <p class="subheading">We handle all your technology so you can focus on running your business</p>
+                <div class="btn-group">
+                    <a href="#contact" class="btn btn-primary">Get Free IT Assessment</a>
+                    <a href="#problems" class="btn btn-secondary">See How We Help</a>
+                </div>
+            </div>
+            <div class="benefits-box">
+                <div class="benefit-item">24/7 Support When You Need It</div>
+                <div class="benefit-item">Fixed Monthly Pricing</div>
+                <div class="benefit-item">No More IT Emergencies</div>
+                <div class="benefit-item">Everything Just Works</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section class="problems" id="problems">
+        <div class="problems-content">
+            <h2>Sound Familiar?</h2>
+            <p class="problems-subtitle">These are the problems we solve every day</p>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <h3 class="problem-title">Computer Problems</h3>
+                    <p class="problem-text">"Our computers are slow, we keep getting viruses, and nobody knows how to fix anything"</p>
+                    <p class="solution-text">✓ We keep your computers fast, secure, and working perfectly</p>
+                </div>
+                <div class="problem-card">
+                    <h3 class="problem-title">Lost Data Nightmares</h3>
+                    <p class="problem-text">"We lost important files and had no backup. It cost us thousands"</p>
+                    <p class="solution-text">✓ Automatic backups mean you never lose anything again</p>
+                </div>
+                <div class="problem-card">
+                    <h3 class="problem-title">Security Worries</h3>
+                    <p class="problem-text">"We're terrified of ransomware and hackers but don't know what to do"</p>
+                    <p class="solution-text">✓ Military-grade security that stops threats before they start</p>
+                </div>
+                <div class="problem-card">
+                    <h3 class="problem-title">IT Costs Out of Control</h3>
+                    <p class="problem-text">"We never know what IT will cost month to month"</p>
+                    <p class="solution-text">✓ One fixed monthly price covers everything</p>
+                </div>
+                <div class="problem-card">
+                    <h3 class="problem-title">Can't Work Remotely</h3>
+                    <p class="problem-text">"Our team can't access files from home or on the road"</p>
+                    <p class="solution-text">✓ Work from anywhere with secure cloud access</p>
+                </div>
+                <div class="problem-card">
+                    <h3 class="problem-title">No IT Strategy</h3>
+                    <p class="problem-text">"We buy technology randomly and hope it works together"</p>
+                    <p class="solution-text">✓ Strategic planning saves you money and headaches</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="services-content">
+            <h2>Everything Your Business Needs</h2>
+            <div class="service-list">
+                <div class="service-item">
+                    <h3 class="service-name">Computer Support</h3>
+                    <p class="service-desc">Fix any computer problem in minutes, not days</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">Network Management</h3>
+                    <p class="service-desc">Keep your internet and network running fast</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">Email & Office 365</h3>
+                    <p class="service-desc">Professional email that always works</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">Data Backup</h3>
+                    <p class="service-desc">Never lose important files again</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">Cybersecurity</h3>
+                    <p class="service-desc">Stop hackers and ransomware cold</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">Cloud Services</h3>
+                    <p class="service-desc">Access everything from anywhere</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">Phone Systems</h3>
+                    <p class="service-desc">Modern phone service that saves money</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">IT Consulting</h3>
+                    <p class="service-desc">Make smart technology decisions</p>
+                </div>
+                <div class="service-item">
+                    <h3 class="service-name">Compliance Help</h3>
+                    <p class="service-desc">Meet HIPAA, PCI, and other requirements</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="testimonials-content">
+            <h2>What Our Clients Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"They spotted ransomware before it could do any damage. We've never had a problem since they took over our IT."</p>
+                    <p class="testimonial-author">Sarah Johnson</p>
+                    <p class="testimonial-company">Johnson Legal Group</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Our IT costs dropped 40% and everything actually works better. Best decision we ever made."</p>
+                    <p class="testimonial-author">Michael Chen</p>
+                    <p class="testimonial-company">Chen Manufacturing</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"We went from constant IT problems to zero downtime. It's like having a full IT department for a fraction of the cost."</p>
+                    <p class="testimonial-author">Lisa Rodriguez</p>
+                    <p class="testimonial-company">Rodriguez Dental</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-content">
+            <div class="stat-item">
+                <div class="stat-number">15min</div>
+                <div class="stat-label">Average Response</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Happy Clients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$0</div>
+                <div class="stat-label">Hidden Fees</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-content">
+            <h2>Stop Fighting Technology</h2>
+            <p>Get a free IT assessment and see how much time and money you could save</p>
+            <a href="tel:1-800-IT-HELP" class="cta-phone">1-800-IT-HELP</a>
+            <a href="#" class="btn btn-primary">Schedule Free Assessment</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Services</h3>
+                <a href="#">Managed IT Services</a>
+                <a href="#">Cloud Solutions</a>
+                <a href="#">Cybersecurity</a>
+                <a href="#">Backup & Recovery</a>
+                <a href="#">IT Consulting</a>
+            </div>
+            <div class="footer-section">
+                <h3>Industries</h3>
+                <a href="#">Healthcare</a>
+                <a href="#">Legal</a>
+                <a href="#">Manufacturing</a>
+                <a href="#">Non-Profits</a>
+                <a href="#">Professional Services</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>1-800-IT-HELP</p>
+                <p>support@405Network.com</p>
+                <p>Available 24/7/365</p>
+                <p>Chicago, IL</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parallax scrolling
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+            
+            parallaxElements.forEach(element => {
+                const speed = element.dataset.speed;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+
+            // Header shrink
+            const header = document.getElementById('header');
+            if (scrolled > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
